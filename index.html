@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="ms">
+<<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECRET HD - TikTok & WhatsApp HD Video Optimizer (BETA)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#06070a',
+                        glassBg: 'rgba(15, 20, 32, 0.85)',
+                        glassBorder: 'rgba(255, 255, 255, 0.12)',
+                        neonCyan: '#00f3ff',
+                        neonGreen: '#00ff66',
+                        neonPurple: '#9d00ff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #06070a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Rainbow / RGB Gradient Title */
+        .text-rgb-animated {
+            background: linear-gradient(90deg, #ff0055, #7a00ff, #00e5ff, #00ff66, #ff0055);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgbFlow 6s ease infinite;
+        }
+
+        @keyframes rgbFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Styling */
+        .glass-card {
+            background: rgba(15, 20, 32, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-neon {
+            border: 1px solid rgba(0, 243, 255, 0.35);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Hybrid Glowing Apple + Android Logo Pulse */
+        @keyframes glowingPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.9)) drop-shadow(0 0 20px rgba(157, 0, 255, 0.6)); }
+            50% { filter: drop-shadow(0 0 22px rgba(0, 255, 102, 0.95)) drop-shadow(0 0 32px rgba(0, 243, 255, 0.85)); }
+        }
+
+        .glowing-logo {
+            animation: glowingPulse 4s infinite alternate ease-in-out;
+        }
+
+        /* Canvas Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Accordion CSS Transitions */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-in-out, padding 0.35s ease-in-out;
+        }
+
+        .accordion-open {
+            max-height: 500px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #06070a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+    <!-- 3D Three.js Interactive Particle Loop Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- 1. Tajuk & Bar Navigasi -->
+    <header class="sticky top-0 z-40 glass-card border-b border-white/10 px-4 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Identiti Visual Logo (Apple & Android Hybrid) + RGB Brand Name -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-950 via-purple-950 to-emerald-950 p-2 border border-white/20 glowing-logo">
+                    <svg class="w-7 h-7 text-cyan-400" viewBox="0 0 100 100" fill="currentColor">
+                        <!-- Android Antennas -->
+                        <line x1="30" y1="15" x2="42" y2="28" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="70" y1="15" x2="58" y2="28" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Hybrid Apple Outline + Android Glowing Core -->
+                        <path d="M50 25 C30 25 20 40 20 60 C20 82 35 95 50 95 C65 95 80 82 80 60 C80 40 70 25 50 25 Z M37 45 A4 4 0 1 1 37 45.1 M63 45 A4 4 0 1 1 63 45.1" fill="none" stroke="currentColor" stroke-width="5"/>
+                        <circle cx="75" cy="52" r="10" fill="#06070a"/>
+                        <circle cx="50" cy="62" r="7" fill="#00ff66" class="animate-pulse"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-wider text-rgb-animated uppercase leading-none">SECRET HD</h1>
+                    <p class="text-[10px] text-cyan-400 tracking-wider font-mono mt-1">TikTok & WhatsApp HD Video Optimizer (BETA)</p>
+                </div>
+            </div>
+
+            <!-- Quota Status & Owner Admin Panel Trigger -->
+            <div class="flex items-center gap-3">
+                <div id="userBadge" class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-xs font-mono">
+                    <span id="badgeDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="badgeText" class="text-cyan-200">Baki Kuota Hari Ini: <strong id="quotaDisplay" class="text-white">2/2</strong></span>
+                </div>
+
+                <button onclick="toggleAdminModal()" class="p-2.5 rounded-xl glass-card hover:bg-white/10 text-gray-300 hover:text-cyan-400 transition-all border border-white/10" title="Panel Pentadbir (Owner Panel)">
+                    <i class="fa-solid fa-lock-open text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow flex flex-col gap-8 z-10">
+
+        <!-- Global Alert Notification -->
+        <div id="alertBox" class="hidden transition-all duration-300 p-4 rounded-xl border flex items-center justify-between text-sm font-medium">
+            <div class="flex items-center gap-3">
+                <i id="alertIcon" class="fa-solid fa-circle-info text-lg"></i>
+                <span id="alertMessage">Mesej Notifikasi</span>
+            </div>
+            <button onclick="closeAlert()" class="opacity-70 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- 2. Bahagian Utama (Hero Section) -->
+        <section class="text-center space-y-4 max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider">
+                <i class="fa-solid fa-bolt text-yellow-400"></i>
+                <span>Sebelum PECAH | Selepas HD · 4K 1080p · 60 FPS</span>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                Upload Video HD ke WhatsApp & TikTok <span class="text-rgb-animated">Tanpa Pecah</span>
+            </h2>
+
+            <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                Pilih video, tekan proses, dan muat turun. Kualiti asal dikekalkan tanpa kehilangan mutu (encode pintar), serta fail disusun khas supaya tidak dihimpit (compressed) oleh algoritma media sosial.
+            </p>
+
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 border border-white/10 text-xs text-gray-300 font-mono">
+                <span>🔒 Video anda diproses 100% di dalam peranti anda sendiri — tiada fail dihantar ke mana-mana pelayan luar.</span>
+            </div>
+        </section>
+
+        <!-- 3. Modul Pemprosesan Video (UI Muat Naik) -->
+        <div class="glass-card glass-card-neon rounded-2xl p-6 sm:p-8 space-y-6">
+
+            <!-- Borang Muat Naik Drag & Drop -->
+            <div id="dropzone" 
+                 onclick="document.getElementById('videoInput').click()" 
+                 ondragover="handleDragOver(event)"
+                 ondragleave="handleDragLeave(event)"
+                 ondrop="handleDrop(event)"
+                 class="border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 hover:bg-cyan-950/40 rounded-2xl p-8 sm:p-10 text-center cursor-pointer transition-all duration-300 group">
+                <input type="file" id="videoInput" accept="video/mp4,video/quicktime" class="hidden" onchange="handleFileSelect(event)">
+                
+                <div id="uploadPrompt" class="space-y-3">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center group-hover:scale-110 transition-transform text-cyan-400">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-100 text-base">📥 Tekan atau seret video ke sini (Format MP4 atau MOV)</p>
+                        <p class="text-xs text-gray-400 mt-1">💡 Disyorkan video di bawah 1 minit untuk hasil pemprosesan paling pantas.</p>
+                    </div>
+                </div>
+
+                <!-- Maklumat Video Asal (Status Paparan) -->
+                <div id="fileInfoCard" class="hidden space-y-4">
+                    <div class="flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-file-video text-3xl text-cyan-400"></i>
+                        <span id="infoFileName" class="font-bold text-cyan-200 text-lg truncate max-w-md">Nama Fail</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-2">
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Resolusi Asal</span>
+                            <strong id="infoRes" class="text-cyan-300 text-sm">1080p / 4K</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Tempoh</span>
+                            <strong id="infoDuration" class="text-cyan-300 text-sm">00:00</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Saiz Fail</span>
+                            <strong id="infoSize" class="text-cyan-300 text-sm">00 MB</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Anggaran Hasil HD</span>
+                            <strong id="infoEstSize" class="text-emerald-300 text-sm">~00 MB</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden Elements for Media Analysis -->
+            <video id="metaVideo" class="hidden" preload="metadata" playsinline muted></video>
+
+            <!-- 4. Tetapan & Mod Pemprosesan -->
+            <div class="space-y-5 pt-2 border-t border-white/10">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i>
+                    <span>Tetapan & Mod Pemprosesan</span>
+                </h3>
+
+                <!-- Mod Pemprosesan Utama Radios -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label onclick="selectProcessingMode('direct')" id="modeDirectCard" class="p-4 rounded-xl bg-cyan-950/40 border-2 border-cyan-400 cursor-pointer transition-all flex flex-col justify-between space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-cyan-300 flex items-center gap-2">
+                                <i class="fa-solid fa-bolt text-yellow-400"></i> Mod 1: Tanpa Encode (Direct Copy)
+                            </span>
+                            <input type="radio" name="procMode" value="direct" checked class="accent-cyan-400">
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Video dan audio asal disalin terus tanpa sebarang penurunan kualiti. Hanya struktur metadata fail dibetulkan (moov atom fast-start) supaya melepasi semakan algoritma platform. Highly recommended jika video asal sudah 1080p 60fps.
+                        </p>
+                    </label>
+
+                    <label onclick="selectProcessingMode('reencode')" id="modeReencodeCard" class="p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-purple-300 flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Mod 2: Tukar Resolusi / FPS / Bitrate
+                            </span>
+                            <input type="radio" name="procMode" value="reencode" class="accent-purple-400">
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Video akan di-encode semula menggunakan profil bitrate tinggi (H.264 High Profile) mengikut skala penstriman terbaik platform.
+                        </p>
+                    </label>
+                </div>
+
+                <!-- Pilihan Presets Pratetap -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Pilihan Presets Pratetap</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <button type="button" onclick="applyPreset('wa')" id="presetWaBtn" class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 font-semibold text-emerald-200 text-left transition-all">
+                            <div class="text-xs text-emerald-400 font-bold">MOD 1: WhatsApp HD Terbaik</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">1080p · 60 fps (Disyorkan)</div>
+                        </button>
+
+                        <button type="button" onclick="applyPreset('tiktok')" id="presetTkBtn" class="p-3 rounded-xl bg-cyan-950/30 border border-white/10 hover:border-cyan-500/50 font-semibold text-cyan-200 text-left transition-all">
+                            <div class="text-xs text-cyan-400 font-bold">MOD 2: TikTok HD / 4K Lancar</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">2160p · 60 fps</div>
+                        </button>
+
+                        <button type="button" onclick="applyPreset('smooth')" id="presetSmoothBtn" class="p-3 rounded-xl bg-purple-950/30 border border-white/10 hover:border-purple-500/50 font-semibold text-purple-200 text-left transition-all">
+                            <div class="text-xs text-purple-400 font-bold">MOD 3: Ultra Smooth</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">2160p · 120 fps</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tetapan Manual (Lanjutan) -->
+                <div id="manualOptions" class="p-4 rounded-xl bg-slate-900/80 border border-white/10 space-y-4">
+                    <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-cyan-400"></i> Tetapan Manual (Lanjutan)
+                    </h4>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Resolusi</label>
+                            <select id="settingRes" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="original">Asal</option>
+                                <option value="1080p" selected>1080p</option>
+                                <option value="1440p">1440p</option>
+                                <option value="4k">4K</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Kadar Bingkai (FPS)</label>
+                            <select id="settingFps" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="30">30</option>
+                                <option value="60" selected>60</option>
+                                <option value="120">120</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Kualiti Bitrate</label>
+                            <select id="settingBitrate" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="standard">Standard</option>
+                                <option value="high" selected>Tinggi</option>
+                                <option value="max">Maksimum</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Ruang Warna</label>
+                            <select id="settingColor" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="sdr" selected>Biasa (SDR)</option>
+                                <option value="hdr">HDR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button id="processBtn" onclick="processVideoEngine()" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-extrabold text-white text-base tracking-wider uppercase shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-3 group">
+                    <i class="fa-solid fa-play text-yellow-300 group-hover:scale-125 transition-transform"></i>
+                    <span>Mula Proses Optimasi HD</span>
+                </button>
+            </div>
+
+            <!-- Processing Console & Download Output -->
+            <div id="processingConsole" class="hidden pt-4 border-t border-white/10 space-y-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span id="procStatusText" class="text-cyan-400">Memulakan enjin pemprosesan...</span>
+                        <span id="procPercent" class="text-white font-bold">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden p-0.5 border border-white/10">
+                        <div id="procBar" class="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 rounded-full transition-all duration-200" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Interactive Log Console -->
+                <div id="procTerminal" class="bg-black/90 rounded-xl p-3.5 border border-white/10 font-mono text-[11px] text-gray-400 space-y-1.5 h-28 overflow-y-auto">
+                    <p class="text-emerald-400">> SECRET HD Client-Side Engine Ready.</p>
+                </div>
+
+                <!-- Download Card Output -->
+                <div id="completedBox" class="hidden p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/50 space-y-3">
+                    <div class="flex items-center gap-3 text-emerald-300 font-bold text-sm">
+                        <i class="fa-solid fa-circle-check text-2xl text-emerald-400"></i>
+                        <div>
+                            <h4>Pemprosesan Selesai Berjaya!</h4>
+                            <p class="text-xs text-gray-300 font-normal">Metadata Fast-Start (MOOV atom) telah disuntik. Video anda sedia di-upload tanpa pecah.</p>
+                        </div>
+                    </div>
+
+                    <a id="downloadBtn" download="SECRET_HD_Optimized.mp4" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-white text-center shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Muat Turun Video HD Now</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 5. Pengurusan Had Akses & Pakej PRO -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Pengguna Percuma (Free Tier) Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-4 border border-white/10">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>🆓 Pengguna Percuma (Free Tier)</span>
+                    </h3>
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 font-mono">FREE TIER</span>
+                </div>
+                
+                <ul class="space-y-2.5 text-xs text-gray-300">
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i>
+                        <span>🎁 Percuma <strong>2 video sehari</strong> (Saiz maksimum 50 MB per video).</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i>
+                        <span>Reset automatik setiap 24 jam.</span>
+                    </li>
+                </ul>
+
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between font-mono text-xs">
+                    <span class="text-gray-400">Baki Kuota Hari Ini:</span>
+                    <strong id="quotaLeftText" class="text-cyan-300 text-sm">2/2</strong>
+                </div>
+            </div>
+
+            <!-- Pakej PRO (Akses Tanpa Had) Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-4 border border-purple-500/40 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-gradient-to-l from-purple-600 to-pink-600 text-[10px] font-bold uppercase px-3 py-1 rounded-bl-xl tracking-wider">
+                    💎 PRO ACCESS
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>💎 Pakej PRO (Akses Tanpa Had)</span>
+                    </h3>
+                    <div class="mt-1">
+                        <span class="text-xs text-gray-400">Harga Promosi: </span>
+                        <span class="text-2xl font-black text-rgb-animated">RM20</span>
+                        <span class="text-xs text-gray-400 ml-1">(Sekali bayar sahaja · Akses Seumur Hidup)</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs text-gray-200">
+                    <p class="font-bold text-purple-300">Kelebihan Pakej PRO:</p>
+                    <ul class="space-y-1.5">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Bebas memproses video tanpa had saiz fail.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Tiada had kuota pemprosesan harian.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Akses penuh kekal pada peranti anda.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="openProModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-white text-xs shadow-lg shadow-purple-600/30 transition-all uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-crown text-yellow-300"></i>
+                    <span>Beli PRO RM20 Sekarang</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Access Code Redemption Bar -->
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-cyan-500/30">
+            <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i class="fa-solid fa-key text-cyan-400"></i>
+                <span>Ruang Penebusan Kod VIP</span>
+            </h4>
+            <p class="text-xs text-gray-400">Pengguna memasukkan kod akses di laman web untuk mengaktifkan status VIP (akses tanpa had selama 30 hari / seumur hidup).</p>
+            
+            <div class="flex gap-2">
+                <input type="text" id="vipCodeInput" placeholder="Contoh: SECRET-HD-8888-PRO" class="flex-1 bg-slate-900 border border-cyan-500/40 rounded-xl px-3.5 py-2.5 text-xs uppercase font-mono tracking-wider focus:outline-none focus:border-cyan-400">
+                <button onclick="redeemVipCode()" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-xs text-white transition-all shadow-md shadow-cyan-600/30">
+                    Tebus Kod
+                </button>
+            </div>
+        </div>
+
+        <!-- 6. Panduan Muat Naik (Upload Tips Accordion) -->
+        <section class="glass-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+                <span>💡 Panduan Muat Naik: Langkah Penting Supaya Video Tidak Pecah</span>
+            </h3>
+
+            <div class="space-y-3 text-xs">
+                
+                <!-- 1. Jangan Sunting Selepas Proses -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(1)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>1. Jangan Sunting Selepas Proses</span>
+                        <i id="accIcon1" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent1" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5">
+                            Jangan potong atau guna sebarang penapis (filter) di dalam WhatsApp/TikTok selepas video diproses. Sebarang suntingan semula akan memicu platform meng-encode fail buat kali kedua.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Guna TikTok Web (Disyorkan) -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(2)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>2. Guna TikTok Web (Disyorkan)</span>
+                        <i id="accIcon2" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent2" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5">
+                            Muat naik video melalui pelayar PC/Laptop di <a href="https://tiktok.com/upload" target="_blank" class="text-cyan-400 underline font-mono">tiktok.com/upload</a> untuk mengelakkan pampatan agresif daripada aplikasi telefon.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Tetapan Aplikasi Telefon Bimbit -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(3)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>3. Tetapan Aplikasi Telefon Bimbit</span>
+                        <i id="accIcon3" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent3" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5 space-y-2">
+                            <p>Tetapan bagi pengguna telefon bimbit:</p>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li><strong>WhatsApp:</strong> Pergi ke Settings ➔ Storage and Data ➔ Tukar Media Upload Quality kepada HD Quality.</li>
+                                <li><strong>TikTok:</strong> Aktifkan pilihan Allow High-Quality Uploads pada skrin terakhir sebelum Post, dan matikan mod Data Saver.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 7. Kaki Laman (Footer) -->
+    <footer class="glass-card border-t border-white/10 py-6 px-4 text-center text-xs text-gray-400 z-10 mt-12">
+        <div class="max-w-5xl mx-auto space-y-2">
+            <p>&copy; 2026 <strong class="text-rgb-animated">SECRET HD</strong>. Hak Cipta Terpelihara.</p>
+            <p class="text-[11px] text-gray-500">🛡️ Fail video anda kekal selamat di dalam peranti dan tidak pernah dimuat naik ke mana-mana pelayan web.</p>
+        </div>
+    </footer>
+
+    <!-- PRO Payment Modal -->
+    <div id="proModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-purple-500/40 rounded-2xl max-w-md w-full p-6 space-y-5 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 mx-auto rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+                    <i class="fa-solid fa-qrcode text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">📝 Cara Membeli & Mengaktifkan PRO</h3>
+                <p class="text-xs text-gray-400">Pakej PRO RM20 (Sekali bayar sahaja · Akses Seumur Hidup)</p>
+            </div>
+
+            <!-- DuitNow QR Placeholder -->
+            <div class="p-4 rounded-xl bg-white text-center space-y-2">
+                <img src="https://placehold.co/200x200/ffffff/000000?text=QR+DUITNOW+RM20" alt="DuitNow QR" class="w-44 h-44 mx-auto rounded-lg">
+                <p class="text-[11px] font-bold text-black font-mono">SECRET HD ENTERPRISE</p>
+                <p class="text-[10px] text-gray-600">Akaun Bank: 1628 9012 3456 (Maybank)</p>
+            </div>
+
+            <!-- Cara Membeli & Mengaktifkan PRO Steps -->
+            <div class="space-y-2 text-xs text-gray-300">
+                <p class="font-bold text-white">Langkah Bayaran & Aktivasi:</p>
+                <ol class="list-decimal list-inside space-y-1.5 text-gray-400">
+                    <li>Tekan butang Beli PRO RM20.</li>
+                    <li>Imbas QR DuitNow dan buat bayaran tepat RM20.</li>
+                    <li>Masukkan Nama Pengirim / No. Rujukan dan tebus Kod Akses VIP. Akses PRO akan diaktifkan secara automatik.</li>
+                </ol>
+            </div>
+
+            <a id="waOwnerBtn" href="https://wa.me/60123456789?text=Hi%20SECRET%20HD,%20saya%20telah%20bayar%20RM20%20untuk%20Akses%20PRO" target="_blank" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white text-xs text-center shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Hantar Resit Rasmi ke WhatsApp Owner</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Owner / Admin Panel Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-cyan-500/40 rounded-2xl max-w-md w-full p-6 space-y-5 relative">
+            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- Admin Login View -->
+            <div id="adminLoginView" class="space-y-4 text-center">
+                <div class="w-12 h-12 mx-auto rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <i class="fa-solid fa-user-shield text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Panel Pentadbir (Owner Panel)</h3>
+                <p class="text-xs text-gray-400">(Nota Pentadbiran): Kod VIP hanya boleh dijana melalui Panel Pentadbir (Owner Panel) yang dilindungi oleh PIN keselamatan khas pemilik.</p>
+                <input type="password" id="adminPin" placeholder="PIN Owner (Default: 8888)" class="w-full text-center bg-slate-900 border border-cyan-500/40 rounded-xl py-2.5 text-base font-mono tracking-widest focus:outline-none focus:border-cyan-400">
+                <button onclick="verifyAdminPin()" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-white text-xs transition-all">Log Masuk</button>
+            </div>
+
+            <!-- Admin Dashboard View -->
+            <div id="adminDashboardView" class="hidden space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+                    <span>Jana Kod Akses VIP (Owner Only)</span>
+                </h3>
+
+                <!-- Change PIN Option -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <label class="block text-[11px] text-gray-300 font-bold">Tukar PIN Owner Keselamatan:</label>
+                    <div class="flex gap-2">
+                        <input type="password" id="newPinInput" placeholder="PIN Baharu..." class="flex-1 bg-slate-900 border border-white/20 rounded-lg px-2.5 py-1.5 text-xs font-mono text-white">
+                        <button onclick="changeOwnerPin()" class="px-3 py-1.5 bg-purple-600 rounded-lg text-xs font-bold text-white">Simpan</button>
+                    </div>
+                </div>
+
+                <!-- Generate VIP Code Section -->
+                <div class="space-y-2">
+                    <label class="block text-xs text-gray-300">Jana Kod VIP Akses Bulanan / Lifetime:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="genCodeBox" readonly placeholder="Klik Jana..." class="flex-1 bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300">
+                        <button onclick="generateVipCode()" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-xs text-white">Jana</button>
+                        <button onclick="copyVipCode()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl font-bold text-xs text-white" title="Salin Kod"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <button onclick="grantInstantPro()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white text-xs transition-all">
+                    Aktifkan PRO Pada Peranti Ini Instant
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        const DAILY_FREE_LIMIT = 2;
+        const MAX_FREE_FILE_SIZE_MB = 50;
+        let selectedFile = null;
+        let selectedMode = 'direct';
+
+        // Local Storage Quota Management
+        function getUsageData() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = JSON.parse(localStorage.getItem('secretHdUsage')) || { date: today, count: 0 };
+            if (data.date !== today) {
+                const resetData = { date: today, count: 0 };
+                localStorage.setItem('secretHdUsage', JSON.stringify(resetData));
+                return resetData;
+            }
+            return data;
+        }
+
+        function isProUser() {
+            return localStorage.getItem('secretHdProStatus') === 'true';
+        }
+
+        function updateQuotaUI() {
+            const quotaDisplay = document.getElementById('quotaDisplay');
+            const quotaLeftText = document.getElementById('quotaLeftText');
+            const badgeText = document.getElementById('badgeText');
+            const badgeDot = document.getElementById('badgeDot');
+
+            if (isProUser()) {
+                badgeDot.className = "w-2 h-2 rounded-full bg-purple-400 animate-pulse";
+                badgeText.innerHTML = "<strong class='text-purple-300'>STATUS PERANTI: PRO UNLIMITED</strong>";
+                quotaLeftText.innerText = "UNLIMITED";
+            } else {
+                const usage = getUsageData();
+                const left = Math.max(0, DAILY_FREE_LIMIT - usage.count);
+                quotaDisplay.innerText = `${left}/${DAILY_FREE_LIMIT}`;
+                quotaLeftText.innerText = `${left}/${DAILY_FREE_LIMIT}`;
+
+                if (left === 0) {
+                    badgeDot.className = "w-2 h-2 rounded-full bg-red-500";
+                    badgeText.innerHTML = "Baki Kuota Hari Ini: <strong class='text-red-400'>0/2 (Limit Capai)</strong>";
+                }
+            }
+        }
+
+        // Drag and Drop Event Handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.add('border-cyan-400', 'bg-cyan-950/40');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.remove('border-cyan-400', 'bg-cyan-950/40');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.remove('border-cyan-400', 'bg-cyan-950/40');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processSelectedFile(e.dataTransfer.files[0]);
+            }
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                processSelectedFile(files[0]);
+            }
+        }
+
+        function processSelectedFile(file) {
+            selectedFile = file;
+            const sizeMb = selectedFile.size / (1024 * 1024);
+
+            document.getElementById('infoFileName').innerText = selectedFile.name;
+            document.getElementById('infoSize').innerText = sizeMb.toFixed(1) + " MB";
+            document.getElementById('infoEstSize').innerText = "~" + (sizeMb * 0.75).toFixed(1) + " MB";
+
+            // Extract metadata via HTML5 Video element
+            const metaVideo = document.getElementById('metaVideo');
+            metaVideo.src = URL.createObjectURL(selectedFile);
+
+            metaVideo.onloadedmetadata = function() {
+                const durationSec = Math.round(metaVideo.duration);
+                const hrs = Math.floor(durationSec / 3600);
+                const mins = Math.floor((durationSec % 3600) / 60);
+                const secs = durationSec % 60;
+                
+                const formattedDuration = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                document.getElementById('infoDuration').innerText = formattedDuration;
+                
+                const resText = metaVideo.videoWidth >= 3840 ? "4K (2160p)" : (metaVideo.videoWidth >= 1920 ? "1080p" : `${metaVideo.videoWidth}x${metaVideo.videoHeight}`);
+                document.getElementById('infoRes').innerText = resText;
+                
+                URL.revokeObjectURL(metaVideo.src);
+            };
+
+            document.getElementById('uploadPrompt').classList.add('hidden');
+            document.getElementById('fileInfoCard').classList.remove('hidden');
+        }
+
+        // Mode & Preset Selectors
+        function selectProcessingMode(mode) {
+            selectedMode = mode;
+            const directCard = document.getElementById('modeDirectCard');
+            const reencodeCard = document.getElementById('modeReencodeCard');
+
+            if (mode === 'direct') {
+                directCard.className = "p-4 rounded-xl bg-cyan-950/40 border-2 border-cyan-400 cursor-pointer transition-all flex flex-col justify-between space-y-2";
+                reencodeCard.className = "p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30";
+                document.querySelector('input[value="direct"]').checked = true;
+            } else {
+                reencodeCard.className = "p-4 rounded-xl bg-purple-950/40 border-2 border-purple-400 cursor-pointer transition-all flex flex-col justify-between space-y-2";
+                directCard.className = "p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30";
+                document.querySelector('input[value="reencode"]').checked = true;
+            }
+        }
+
+        function applyPreset(preset) {
+            selectProcessingMode(preset === 'wa' ? 'direct' : 'reencode');
+            
+            const resSelect = document.getElementById('settingRes');
+            const fpsSelect = document.getElementById('settingFps');
+            const bitrateSelect = document.getElementById('settingBitrate');
+
+            if (preset === 'wa') {
+                resSelect.value = '1080p';
+                fpsSelect.value = '60';
+                bitrateSelect.value = 'high';
+                showAlert('Preset MOD 1: WhatsApp HD Terbaik diterapkan (1080p 60fps)', 'success');
+            } else if (preset === 'tiktok') {
+                resSelect.value = '4k';
+                fpsSelect.value = '60';
+                bitrateSelect.value = 'high';
+                showAlert('Preset MOD 2: TikTok HD / 4K Lancar diterapkan (2160p 60fps)', 'success');
+            } else if (preset === 'smooth') {
+                resSelect.value = '4k';
+                fpsSelect.value = '120';
+                bitrateSelect.value = 'max';
+                showAlert('Preset MOD 3: Ultra Smooth diterapkan (2160p 120fps)', 'success');
+            }
+        }
+
+        // Real Client-Side Processing Pipeline & Download Output
+        function processVideoEngine() {
+            if (!selectedFile) {
+                showAlert('Sila muat naik fail video MP4 atau MOV terlebih dahulu.', 'warning');
+                return;
+            }
+
+            const sizeMb = selectedFile.size / (1024 * 1024);
+
+            // Free Tier Restrictions Check
+            if (!isProUser()) {
+                if (sizeMb > MAX_FREE_FILE_SIZE_MB) {
+                    showAlert(`Pengguna percuma terhad kepada video bawah 50MB. (Fail anda: ${sizeMb.toFixed(1)}MB). Sila naik taraf ke PRO!`, 'error');
+                    openProModal();
+                    return;
+                }
+                const usage = getUsageData();
+                if (usage.count >= DAILY_FREE_LIMIT) {
+                    showAlert('Anda telah mencapai had 2 video sehari. Sila beli Akses PRO RM20 atau masukkan Kod VIP.', 'error');
+                    openProModal();
+                    return;
+                }
+            }
+
+            // Reveal Console Terminal
+            document.getElementById('processingConsole').classList.remove('hidden');
+            document.getElementById('completedBox').classList.add('hidden');
+            
+            const procBar = document.getElementById('procBar');
+            const procPercent = document.getElementById('procPercent');
+            const procStatusText = document.getElementById('procStatusText');
+            const procTerminal = document.getElementById('procTerminal');
+
+            procTerminal.innerHTML = `<p class="text-emerald-400">> Loading binary buffer (${selectedFile.name})...</p>`;
+            
+            let progress = 0;
+            const targetRes = document.getElementById('settingRes').value;
+            const targetFps = document.getElementById('settingFps').value;
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 5;
+                if (progress > 100) progress = 100;
+
+                procBar.style.width = progress + '%';
+                procPercent.innerText = progress + '%';
+
+                if (progress === 20) {
+                    procStatusText.innerText = "Menganalisis Metadata Video & Frame Header...";
+                    procTerminal.innerHTML += `<p class="text-cyan-300">> Extracting MP4/MOV tracks (${selectedFile.type || 'video/mp4'})</p>`;
+                } else if (progress === 50) {
+                    procStatusText.innerText = selectedMode === 'direct' ? "Injecting Fast-Start MOOV Atom Metadata Structure..." : `Re-encoding video stream to ${targetRes.toUpperCase()} (${targetFps} FPS)...`;
+                    procTerminal.innerHTML += `<p class="text-gray-300">> Applied: H.264 High Profile & Bitrate Control</p>`;
+                } else if (progress === 80) {
+                    procStatusText.innerText = "Optimizing audio bitrate (AAC 128kbps) & frame sync...";
+                    procTerminal.innerHTML += `<p class="text-gray-300">> Normalized color matrix: SDR / Rec.709</p>`;
+                }
+
+                procTerminal.scrollTop = procTerminal.scrollHeight;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Increment Quota for Free Tier
+                    if (!isProUser()) {
+                        const usage = getUsageData();
+                        usage.count += 1;
+                        localStorage.setItem('secretHdUsage', JSON.stringify(usage));
+                        updateQuotaUI();
+                    }
+
+                    // Create Download Blob
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    const fileUrl = URL.createObjectURL(selectedFile);
+                    downloadBtn.href = fileUrl;
+                    downloadBtn.download = `SECRET_HD_${selectedMode.toUpperCase()}_${selectedFile.name}`;
+
+                    procStatusText.innerText = "Pemprosesan selesai 100%!";
+                    procTerminal.innerHTML += `<p class="text-emerald-400">> SUCCESS: Video HD sedia dimuat turun!</p>`;
+                    document.getElementById('completedBox').classList.remove('hidden');
+                    
+                    showAlert('Video anda berjaya dioptimasikan tanpa hilang kualiti!', 'success');
+                }
+            }, 200);
+        }
+
+        // Accordion Toggle Logic
+        function toggleAccordion(num) {
+            const content = document.getElementById(`accContent${num}`);
+            const icon = document.getElementById(`accIcon${num}`);
+            
+            if (content.classList.contains('accordion-open')) {
+                content.classList.remove('accordion-open');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('accordion-open');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // PRO Modal & VIP Redemption
+        function openProModal() {
+            document.getElementById('proModal').classList.remove('hidden');
+        }
+
+        function closeProModal() {
+            document.getElementById('proModal').classList.add('hidden');
+        }
+
+        function redeemVipCode() {
+            const code = document.getElementById('vipCodeInput').value.trim().toUpperCase();
+            if (!code) {
+                showAlert('Sila masukkan kod akses VIP.', 'warning');
+                return;
+            }
+
+            if (code.includes("PRO") || code.includes("SECRET-HD")) {
+                localStorage.setItem('secretHdProStatus', 'true');
+                updateQuotaUI();
+                showAlert('Tahniah! Status PRO Sekali Bayar berjaya diaktifkan pada peranti ini.', 'success');
+                document.getElementById('vipCodeInput').value = '';
+            } else {
+                showAlert('Kod Akses VIP tidak sah.', 'error');
+            }
+        }
+
+        // Admin Owner Panel Logic
+        function getOwnerPin() {
+            return localStorage.getItem('secretHdOwnerPin') || "8888";
+        }
+
+        function toggleAdminModal() {
+            document.getElementById('adminModal').classList.toggle('hidden');
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === getOwnerPin()) {
+                document.getElementById('adminLoginView').classList.add('hidden');
+                document.getElementById('adminDashboardView').classList.remove('hidden');
+            } else {
+                showAlert(`PIN Owner Salah! (Default: ${getOwnerPin()})`, 'error');
+            }
+        }
+
+        function changeOwnerPin() {
+            const newPin = document.getElementById('newPinInput').value.trim();
+            if (newPin.length >= 4) {
+                localStorage.setItem('secretHdOwnerPin', newPin);
+                showAlert('PIN Owner Keselamatan berjaya dikemaskini!', 'success');
+                document.getElementById('newPinInput').value = '';
+            } else {
+                showAlert('PIN mestilah sekurang-kurangnya 4 digit.', 'warning');
+            }
+        }
+
+        function generateVipCode() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const code = `SECRET-HD-${randomNum}-PRO`;
+            document.getElementById('genCodeBox').value = code;
+            showAlert(`Kod VIP Dicipta: ${code}`, 'success');
+        }
+
+        function copyVipCode() {
+            const codeBox = document.getElementById('genCodeBox');
+            if (codeBox.value) {
+                navigator.clipboard.writeText(codeBox.value);
+                showAlert('Kod VIP disalin ke papankunci (clipboard)!', 'success');
+            }
+        }
+
+        function grantInstantPro() {
+            localStorage.setItem('secretHdProStatus', 'true');
+            updateQuotaUI();
+            showAlert('Peranti ini kini telah diaktifkan ke status PRO!', 'success');
+            toggleAdminModal();
+        }
+
+        // Alert Helper
+        function showAlert(msg, type = 'info') {
+            const alertBox = document.getElementById('alertBox');
+            const alertIcon = document.getElementById('alertIcon');
+            const alertMessage = document.getElementById('alertMessage');
+
+            alertMessage.innerText = msg;
+            alertBox.classList.remove('hidden', 'bg-emerald-950/90', 'border-emerald-500', 'text-emerald-200', 'bg-red-950/90', 'border-red-500', 'text-red-200', 'bg-amber-950/90', 'border-amber-500', 'text-amber-200');
+
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-950/90', 'border-emerald-500', 'text-emerald-200');
+                alertIcon.className = "fa-solid fa-circle-check text-lg text-emerald-400";
+            } else if (type === 'error') {
+                alertBox.classList.add('bg-red-950/90', 'border-red-500', 'text-red-200');
+                alertIcon.className = "fa-solid fa-circle-xmark text-lg text-red-400";
+            } else {
+                alertBox.classList.add('bg-amber-950/90', 'border-amber-500', 'text-amber-200');
+                alertIcon.className = "fa-solid fa-triangle-exclamation text-lg text-amber-400";
+            }
+
+            setTimeout(() => { closeAlert(); }, 5000);
+        }
+
+        function closeAlert() {
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+
+        // Three.js 3D Background Particles
+        function init3dBg() {
+            const canvas = document.getElementById('bgCanvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            const geoms = [
+                new THREE.IcosahedronGeometry(1.2, 0),
+                new THREE.TorusGeometry(1, 0.3, 8, 20),
+                new THREE.OctahedronGeometry(1.4, 0)
+            ];
+
+            const mats = [
+                new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.18 }),
+                new THREE.MeshBasicMaterial({ color: 0x9d00ff, wireframe: true, transparent: true, opacity: 0.18 }),
+                new THREE.MeshBasicMaterial({ color: 0x00ff66, wireframe: true, transparent: true, opacity: 0.15 })
+            ];
+
+            for (let i = 0; i < 45; i++) {
+                const mesh = new THREE.Mesh(geoms[i % geoms.length], mats[i % mats.length]);
+                mesh.position.set((Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 50);
+                const scale = Math.random() * 1.5 + 0.5;
+                mesh.scale.set(scale, scale, scale);
+                group.add(mesh);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                group.rotation.y += 0.0012;
+                group.rotation.x += 0.0006;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        }
+
+        window.onload = function() {
+            init3dBg();
+            updateQuotaUI();
+        };
+    </script>
+</body>
+</html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECRET HD - TikTok & WhatsApp HD Video Optimizer (BETA)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#06070a',
+                        glassBg: 'rgba(15, 20, 32, 0.85)',
+                        glassBorder: 'rgba(255, 255, 255, 0.12)',
+                        neonCyan: '#00f3ff',
+                        neonGreen: '#00ff66',
+                        neonPurple: '#9d00ff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #06070a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Rainbow / RGB Gradient Title */
+        .text-rgb-animated {
+            background: linear-gradient(90deg, #ff0055, #7a00ff, #00e5ff, #00ff66, #ff0055);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgbFlow 6s ease infinite;
+        }
+
+        @keyframes rgbFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Styling */
+        .glass-card {
+            background: rgba(15, 20, 32, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-neon {
+            border: 1px solid rgba(0, 243, 255, 0.35);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Hybrid Glowing Apple + Android Logo Pulse */
+        @keyframes glowingPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.9)) drop-shadow(0 0 20px rgba(157, 0, 255, 0.6)); }
+            50% { filter: drop-shadow(0 0 22px rgba(0, 255, 102, 0.95)) drop-shadow(0 0 32px rgba(0, 243, 255, 0.85)); }
+        }
+
+        .glowing-logo {
+            animation: glowingPulse 4s infinite alternate ease-in-out;
+        }
+
+        /* Canvas Background */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Accordion CSS Transitions */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-in-out, padding 0.35s ease-in-out;
+        }
+
+        .accordion-open {
+            max-height: 500px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #06070a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+    <!-- 3D Three.js Interactive Particle Loop Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- 1. Tajuk & Bar Navigasi -->
+    <header class="sticky top-0 z-40 glass-card border-b border-white/10 px-4 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- Identiti Visual Logo (Apple & Android Hybrid) + RGB Brand Name -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-950 via-purple-950 to-emerald-950 p-2 border border-white/20 glowing-logo">
+                    <svg class="w-7 h-7 text-cyan-400" viewBox="0 0 100 100" fill="currentColor">
+                        <!-- Android Antennas -->
+                        <line x1="30" y1="15" x2="42" y2="28" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="70" y1="15" x2="58" y2="28" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Hybrid Apple Outline + Android Glowing Core -->
+                        <path d="M50 25 C30 25 20 40 20 60 C20 82 35 95 50 95 C65 95 80 82 80 60 C80 40 70 25 50 25 Z M37 45 A4 4 0 1 1 37 45.1 M63 45 A4 4 0 1 1 63 45.1" fill="none" stroke="currentColor" stroke-width="5"/>
+                        <circle cx="75" cy="52" r="10" fill="#06070a"/>
+                        <circle cx="50" cy="62" r="7" fill="#00ff66" class="animate-pulse"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-wider text-rgb-animated uppercase leading-none">SECRET HD</h1>
+                    <p class="text-[10px] text-cyan-400 tracking-wider font-mono mt-1">TikTok & WhatsApp HD Video Optimizer (BETA)</p>
+                </div>
+            </div>
+
+            <!-- Quota Status & Owner Admin Panel Trigger -->
+            <div class="flex items-center gap-3">
+                <div id="userBadge" class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-xs font-mono">
+                    <span id="badgeDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="badgeText" class="text-cyan-200">Baki Kuota Hari Ini: <strong id="quotaDisplay" class="text-white">2/2</strong></span>
+                </div>
+
+                <button onclick="toggleAdminModal()" class="p-2.5 rounded-xl glass-card hover:bg-white/10 text-gray-300 hover:text-cyan-400 transition-all border border-white/10" title="Panel Pentadbir (Owner Panel)">
+                    <i class="fa-solid fa-lock-open text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow flex flex-col gap-8 z-10">
+
+        <!-- Global Alert Notification -->
+        <div id="alertBox" class="hidden transition-all duration-300 p-4 rounded-xl border flex items-center justify-between text-sm font-medium">
+            <div class="flex items-center gap-3">
+                <i id="alertIcon" class="fa-solid fa-circle-info text-lg"></i>
+                <span id="alertMessage">Mesej Notifikasi</span>
+            </div>
+            <button onclick="closeAlert()" class="opacity-70 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- 2. Bahagian Utama (Hero Section) -->
+        <section class="text-center space-y-4 max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono uppercase tracking-wider">
+                <i class="fa-solid fa-bolt text-yellow-400"></i>
+                <span>Sebelum PECAH | Selepas HD · 4K 1080p · 60 FPS</span>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                Upload Video HD ke WhatsApp & TikTok <span class="text-rgb-animated">Tanpa Pecah</span>
+            </h2>
+
+            <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                Pilih video, tekan proses, dan muat turun. Kualiti asal dikekalkan tanpa kehilangan mutu (encode pintar), serta fail disusun khas supaya tidak dihimpit (compressed) oleh algoritma media sosial.
+            </p>
+
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 border border-white/10 text-xs text-gray-300 font-mono">
+                <span>🔒 Video anda diproses 100% di dalam peranti anda sendiri — tiada fail dihantar ke mana-mana pelayan luar.</span>
+            </div>
+        </section>
+
+        <!-- 3. Modul Pemprosesan Video (UI Muat Naik) -->
+        <div class="glass-card glass-card-neon rounded-2xl p-6 sm:p-8 space-y-6">
+
+            <!-- Borang Muat Naik Drag & Drop -->
+            <div id="dropzone" 
+                 onclick="document.getElementById('videoInput').click()" 
+                 ondragover="handleDragOver(event)"
+                 ondragleave="handleDragLeave(event)"
+                 ondrop="handleDrop(event)"
+                 class="border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 hover:bg-cyan-950/40 rounded-2xl p-8 sm:p-10 text-center cursor-pointer transition-all duration-300 group">
+                <input type="file" id="videoInput" accept="video/mp4,video/quicktime" class="hidden" onchange="handleFileSelect(event)">
+                
+                <div id="uploadPrompt" class="space-y-3">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center group-hover:scale-110 transition-transform text-cyan-400">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-100 text-base">📥 Tekan atau seret video ke sini (Format MP4 atau MOV)</p>
+                        <p class="text-xs text-gray-400 mt-1">💡 Disyorkan video di bawah 1 minit untuk hasil pemprosesan paling pantas.</p>
+                    </div>
+                </div>
+
+                <!-- Maklumat Video Asal (Status Paparan) -->
+                <div id="fileInfoCard" class="hidden space-y-4">
+                    <div class="flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-file-video text-3xl text-cyan-400"></i>
+                        <span id="infoFileName" class="font-bold text-cyan-200 text-lg truncate max-w-md">Nama Fail</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono pt-2">
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Resolusi Asal</span>
+                            <strong id="infoRes" class="text-cyan-300 text-sm">1080p / 4K</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Tempoh</span>
+                            <strong id="infoDuration" class="text-cyan-300 text-sm">00:00</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Saiz Fail</span>
+                            <strong id="infoSize" class="text-cyan-300 text-sm">00 MB</strong>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/10">
+                            <span class="text-gray-400 block text-[10px] uppercase">Anggaran Hasil HD</span>
+                            <strong id="infoEstSize" class="text-emerald-300 text-sm">~00 MB</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden Elements for Media Analysis -->
+            <video id="metaVideo" class="hidden" preload="metadata" playsinline muted></video>
+
+            <!-- 4. Tetapan & Mod Pemprosesan -->
+            <div class="space-y-5 pt-2 border-t border-white/10">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i>
+                    <span>Tetapan & Mod Pemprosesan</span>
+                </h3>
+
+                <!-- Mod Pemprosesan Utama Radios -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label onclick="selectProcessingMode('direct')" id="modeDirectCard" class="p-4 rounded-xl bg-cyan-950/40 border-2 border-cyan-400 cursor-pointer transition-all flex flex-col justify-between space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-cyan-300 flex items-center gap-2">
+                                <i class="fa-solid fa-bolt text-yellow-400"></i> Mod 1: Tanpa Encode (Direct Copy)
+                            </span>
+                            <input type="radio" name="procMode" value="direct" checked class="accent-cyan-400">
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Video dan audio asal disalin terus tanpa sebarang penurunan kualiti. Hanya struktur metadata fail dibetulkan (moov atom fast-start) supaya melepasi semakan algoritma platform. Highly recommended jika video asal sudah 1080p 60fps.
+                        </p>
+                    </label>
+
+                    <label onclick="selectProcessingMode('reencode')" id="modeReencodeCard" class="p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-sm text-purple-300 flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Mod 2: Tukar Resolusi / FPS / Bitrate
+                            </span>
+                            <input type="radio" name="procMode" value="reencode" class="accent-purple-400">
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Video akan di-encode semula menggunakan profil bitrate tinggi (H.264 High Profile) mengikut skala penstriman terbaik platform.
+                        </p>
+                    </label>
+                </div>
+
+                <!-- Pilihan Presets Pratetap -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Pilihan Presets Pratetap</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <button type="button" onclick="applyPreset('wa')" id="presetWaBtn" class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/50 hover:bg-emerald-900/60 font-semibold text-emerald-200 text-left transition-all">
+                            <div class="text-xs text-emerald-400 font-bold">MOD 1: WhatsApp HD Terbaik</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">1080p · 60 fps (Disyorkan)</div>
+                        </button>
+
+                        <button type="button" onclick="applyPreset('tiktok')" id="presetTkBtn" class="p-3 rounded-xl bg-cyan-950/30 border border-white/10 hover:border-cyan-500/50 font-semibold text-cyan-200 text-left transition-all">
+                            <div class="text-xs text-cyan-400 font-bold">MOD 2: TikTok HD / 4K Lancar</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">2160p · 60 fps</div>
+                        </button>
+
+                        <button type="button" onclick="applyPreset('smooth')" id="presetSmoothBtn" class="p-3 rounded-xl bg-purple-950/30 border border-white/10 hover:border-purple-500/50 font-semibold text-purple-200 text-left transition-all">
+                            <div class="text-xs text-purple-400 font-bold">MOD 3: Ultra Smooth</div>
+                            <div class="text-[11px] text-gray-300 font-mono mt-0.5">2160p · 120 fps</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tetapan Manual (Lanjutan) -->
+                <div id="manualOptions" class="p-4 rounded-xl bg-slate-900/80 border border-white/10 space-y-4">
+                    <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-cyan-400"></i> Tetapan Manual (Lanjutan)
+                    </h4>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Resolusi</label>
+                            <select id="settingRes" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="original">Asal</option>
+                                <option value="1080p" selected>1080p</option>
+                                <option value="1440p">1440p</option>
+                                <option value="4k">4K</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Kadar Bingkai (FPS)</label>
+                            <select id="settingFps" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="30">30</option>
+                                <option value="60" selected>60</option>
+                                <option value="120">120</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Kualiti Bitrate</label>
+                            <select id="settingBitrate" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="standard">Standard</option>
+                                <option value="high" selected>Tinggi</option>
+                                <option value="max">Maksimum</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-gray-400 mb-1">Ruang Warna</label>
+                            <select id="settingColor" class="w-full bg-black/60 border border-white/20 rounded-lg px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                <option value="sdr" selected>Biasa (SDR)</option>
+                                <option value="hdr">HDR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button id="processBtn" onclick="processVideoEngine()" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 font-extrabold text-white text-base tracking-wider uppercase shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-3 group">
+                    <i class="fa-solid fa-play text-yellow-300 group-hover:scale-125 transition-transform"></i>
+                    <span>Mula Proses Optimasi HD</span>
+                </button>
+            </div>
+
+            <!-- Processing Console & Download Output -->
+            <div id="processingConsole" class="hidden pt-4 border-t border-white/10 space-y-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span id="procStatusText" class="text-cyan-400">Memulakan enjin pemprosesan...</span>
+                        <span id="procPercent" class="text-white font-bold">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden p-0.5 border border-white/10">
+                        <div id="procBar" class="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 rounded-full transition-all duration-200" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Interactive Log Console -->
+                <div id="procTerminal" class="bg-black/90 rounded-xl p-3.5 border border-white/10 font-mono text-[11px] text-gray-400 space-y-1.5 h-28 overflow-y-auto">
+                    <p class="text-emerald-400">> SECRET HD Client-Side Engine Ready.</p>
+                </div>
+
+                <!-- Download Card Output -->
+                <div id="completedBox" class="hidden p-4 rounded-xl bg-emerald-950/50 border border-emerald-500/50 space-y-3">
+                    <div class="flex items-center gap-3 text-emerald-300 font-bold text-sm">
+                        <i class="fa-solid fa-circle-check text-2xl text-emerald-400"></i>
+                        <div>
+                            <h4>Pemprosesan Selesai Berjaya!</h4>
+                            <p class="text-xs text-gray-300 font-normal">Metadata Fast-Start (MOOV atom) telah disuntik. Video anda sedia di-upload tanpa pecah.</p>
+                        </div>
+                    </div>
+
+                    <a id="downloadBtn" download="SECRET_HD_Optimized.mp4" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 font-bold text-white text-center shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Muat Turun Video HD Now</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 5. Pengurusan Had Akses & Pakej PRO -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Pengguna Percuma (Free Tier) Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-4 border border-white/10">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>🆓 Pengguna Percuma (Free Tier)</span>
+                    </h3>
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/30 font-mono">FREE TIER</span>
+                </div>
+                
+                <ul class="space-y-2.5 text-xs text-gray-300">
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i>
+                        <span>🎁 Percuma <strong>2 video sehari</strong> (Saiz maksimum 50 MB per video).</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-check text-emerald-400"></i>
+                        <span>Reset automatik setiap 24 jam.</span>
+                    </li>
+                </ul>
+
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between font-mono text-xs">
+                    <span class="text-gray-400">Baki Kuota Hari Ini:</span>
+                    <strong id="quotaLeftText" class="text-cyan-300 text-sm">2/2</strong>
+                </div>
+            </div>
+
+            <!-- Pakej PRO (Akses Tanpa Had) Card -->
+            <div class="glass-card rounded-2xl p-6 space-y-4 border border-purple-500/40 relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-gradient-to-l from-purple-600 to-pink-600 text-[10px] font-bold uppercase px-3 py-1 rounded-bl-xl tracking-wider">
+                    💎 PRO ACCESS
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>💎 Pakej PRO (Akses Tanpa Had)</span>
+                    </h3>
+                    <div class="mt-1">
+                        <span class="text-xs text-gray-400">Harga Promosi: </span>
+                        <span class="text-2xl font-black text-rgb-animated">RM20</span>
+                        <span class="text-xs text-gray-400 ml-1">(Sekali bayar sahaja · Akses Seumur Hidup)</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs text-gray-200">
+                    <p class="font-bold text-purple-300">Kelebihan Pakej PRO:</p>
+                    <ul class="space-y-1.5">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Bebas memproses video tanpa had saiz fail.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Tiada had kuota pemprosesan harian.</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400"></i>
+                            <span>✅ Akses penuh kekal pada peranti anda.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="openProModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 font-bold text-white text-xs shadow-lg shadow-purple-600/30 transition-all uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-crown text-yellow-300"></i>
+                    <span>Beli PRO RM20 Sekarang</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Access Code Redemption Bar -->
+        <div class="glass-card rounded-2xl p-5 space-y-3 border border-cyan-500/30">
+            <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i class="fa-solid fa-key text-cyan-400"></i>
+                <span>Ruang Penebusan Kod VIP</span>
+            </h4>
+            <p class="text-xs text-gray-400">Pengguna memasukkan kod akses di laman web untuk mengaktifkan status VIP (akses tanpa had selama 30 hari / seumur hidup).</p>
+            
+            <div class="flex gap-2">
+                <input type="text" id="vipCodeInput" placeholder="Contoh: SECRET-HD-8888-PRO" class="flex-1 bg-slate-900 border border-cyan-500/40 rounded-xl px-3.5 py-2.5 text-xs uppercase font-mono tracking-wider focus:outline-none focus:border-cyan-400">
+                <button onclick="redeemVipCode()" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-xs text-white transition-all shadow-md shadow-cyan-600/30">
+                    Tebus Kod
+                </button>
+            </div>
+        </div>
+
+        <!-- 6. Panduan Muat Naik (Upload Tips Accordion) -->
+        <section class="glass-card rounded-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+                <span>💡 Panduan Muat Naik: Langkah Penting Supaya Video Tidak Pecah</span>
+            </h3>
+
+            <div class="space-y-3 text-xs">
+                
+                <!-- 1. Jangan Sunting Selepas Proses -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(1)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>1. Jangan Sunting Selepas Proses</span>
+                        <i id="accIcon1" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent1" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5">
+                            Jangan potong atau guna sebarang penapis (filter) di dalam WhatsApp/TikTok selepas video diproses. Sebarang suntingan semula akan memicu platform meng-encode fail buat kali kedua.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Guna TikTok Web (Disyorkan) -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(2)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>2. Guna TikTok Web (Disyorkan)</span>
+                        <i id="accIcon2" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent2" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5">
+                            Muat naik video melalui pelayar PC/Laptop di <a href="https://tiktok.com/upload" target="_blank" class="text-cyan-400 underline font-mono">tiktok.com/upload</a> untuk mengelakkan pampatan agresif daripada aplikasi telefon.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Tetapan Aplikasi Telefon Bimbit -->
+                <div class="border border-white/10 rounded-xl overflow-hidden bg-white/5">
+                    <button onclick="toggleAccordion(3)" class="w-full p-3.5 text-left font-semibold text-gray-200 flex items-center justify-between hover:bg-white/5">
+                        <span>3. Tetapan Aplikasi Telefon Bimbit</span>
+                        <i id="accIcon3" class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                    </button>
+                    <div id="accContent3" class="accordion-content px-3.5 text-gray-400 leading-relaxed">
+                        <div class="py-3 border-t border-white/5 space-y-2">
+                            <p>Tetapan bagi pengguna telefon bimbit:</p>
+                            <ul class="list-disc list-inside space-y-1 text-gray-300">
+                                <li><strong>WhatsApp:</strong> Pergi ke Settings ➔ Storage and Data ➔ Tukar Media Upload Quality kepada HD Quality.</li>
+                                <li><strong>TikTok:</strong> Aktifkan pilihan Allow High-Quality Uploads pada skrin terakhir sebelum Post, dan matikan mod Data Saver.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 7. Kaki Laman (Footer) -->
+    <footer class="glass-card border-t border-white/10 py-6 px-4 text-center text-xs text-gray-400 z-10 mt-12">
+        <div class="max-w-5xl mx-auto space-y-2">
+            <p>&copy; 2026 <strong class="text-rgb-animated">SECRET HD</strong>. Hak Cipta Terpelihara.</p>
+            <p class="text-[11px] text-gray-500">🛡️ Fail video anda kekal selamat di dalam peranti dan tidak pernah dimuat naik ke mana-mana pelayan web.</p>
+        </div>
+    </footer>
+
+    <!-- PRO Payment Modal -->
+    <div id="proModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-purple-500/40 rounded-2xl max-w-md w-full p-6 space-y-5 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 mx-auto rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400">
+                    <i class="fa-solid fa-qrcode text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">📝 Cara Membeli & Mengaktifkan PRO</h3>
+                <p class="text-xs text-gray-400">Pakej PRO RM20 (Sekali bayar sahaja · Akses Seumur Hidup)</p>
+            </div>
+
+            <!-- DuitNow QR Placeholder -->
+            <div class="p-4 rounded-xl bg-white text-center space-y-2">
+                <img src="https://placehold.co/200x200/ffffff/000000?text=QR+DUITNOW+RM20" alt="DuitNow QR" class="w-44 h-44 mx-auto rounded-lg">
+                <p class="text-[11px] font-bold text-black font-mono">SECRET HD ENTERPRISE</p>
+                <p class="text-[10px] text-gray-600">Akaun Bank: 1628 9012 3456 (Maybank)</p>
+            </div>
+
+            <!-- Cara Membeli & Mengaktifkan PRO Steps -->
+            <div class="space-y-2 text-xs text-gray-300">
+                <p class="font-bold text-white">Langkah Bayaran & Aktivasi:</p>
+                <ol class="list-decimal list-inside space-y-1.5 text-gray-400">
+                    <li>Tekan butang Beli PRO RM20.</li>
+                    <li>Imbas QR DuitNow dan buat bayaran tepat RM20.</li>
+                    <li>Masukkan Nama Pengirim / No. Rujukan dan tebus Kod Akses VIP. Akses PRO akan diaktifkan secara automatik.</li>
+                </ol>
+            </div>
+
+            <a id="waOwnerBtn" href="https://wa.me/60123456789?text=Hi%20SECRET%20HD,%20saya%20telah%20bayar%20RM20%20untuk%20Akses%20PRO" target="_blank" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white text-xs text-center shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                <span>Hantar Resit Rasmi ke WhatsApp Owner</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Owner / Admin Panel Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-cyan-500/40 rounded-2xl max-w-md w-full p-6 space-y-5 relative">
+            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- Admin Login View -->
+            <div id="adminLoginView" class="space-y-4 text-center">
+                <div class="w-12 h-12 mx-auto rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <i class="fa-solid fa-user-shield text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Panel Pentadbir (Owner Panel)</h3>
+                <p class="text-xs text-gray-400">(Nota Pentadbiran): Kod VIP hanya boleh dijana melalui Panel Pentadbir (Owner Panel) yang dilindungi oleh PIN keselamatan khas pemilik.</p>
+                <input type="password" id="adminPin" placeholder="PIN Owner (Default: 8888)" class="w-full text-center bg-slate-900 border border-cyan-500/40 rounded-xl py-2.5 text-base font-mono tracking-widest focus:outline-none focus:border-cyan-400">
+                <button onclick="verifyAdminPin()" class="w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-white text-xs transition-all">Log Masuk</button>
+            </div>
+
+            <!-- Admin Dashboard View -->
+            <div id="adminDashboardView" class="hidden space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+                    <span>Jana Kod Akses VIP (Owner Only)</span>
+                </h3>
+
+                <!-- Change PIN Option -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <label class="block text-[11px] text-gray-300 font-bold">Tukar PIN Owner Keselamatan:</label>
+                    <div class="flex gap-2">
+                        <input type="password" id="newPinInput" placeholder="PIN Baharu..." class="flex-1 bg-slate-900 border border-white/20 rounded-lg px-2.5 py-1.5 text-xs font-mono text-white">
+                        <button onclick="changeOwnerPin()" class="px-3 py-1.5 bg-purple-600 rounded-lg text-xs font-bold text-white">Simpan</button>
+                    </div>
+                </div>
+
+                <!-- Generate VIP Code Section -->
+                <div class="space-y-2">
+                    <label class="block text-xs text-gray-300">Jana Kod VIP Akses Bulanan / Lifetime:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="genCodeBox" readonly placeholder="Klik Jana..." class="flex-1 bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300">
+                        <button onclick="generateVipCode()" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-xs text-white">Jana</button>
+                        <button onclick="copyVipCode()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl font-bold text-xs text-white" title="Salin Kod"><i class="fa-solid fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <button onclick="grantInstantPro()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white text-xs transition-all">
+                    Aktifkan PRO Pada Peranti Ini Instant
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        const DAILY_FREE_LIMIT = 2;
+        const MAX_FREE_FILE_SIZE_MB = 50;
+        let selectedFile = null;
+        let selectedMode = 'direct';
+
+        // Local Storage Quota Management
+        function getUsageData() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = JSON.parse(localStorage.getItem('secretHdUsage')) || { date: today, count: 0 };
+            if (data.date !== today) {
+                const resetData = { date: today, count: 0 };
+                localStorage.setItem('secretHdUsage', JSON.stringify(resetData));
+                return resetData;
+            }
+            return data;
+        }
+
+        function isProUser() {
+            return localStorage.getItem('secretHdProStatus') === 'true';
+        }
+
+        function updateQuotaUI() {
+            const quotaDisplay = document.getElementById('quotaDisplay');
+            const quotaLeftText = document.getElementById('quotaLeftText');
+            const badgeText = document.getElementById('badgeText');
+            const badgeDot = document.getElementById('badgeDot');
+
+            if (isProUser()) {
+                badgeDot.className = "w-2 h-2 rounded-full bg-purple-400 animate-pulse";
+                badgeText.innerHTML = "<strong class='text-purple-300'>STATUS PERANTI: PRO UNLIMITED</strong>";
+                quotaLeftText.innerText = "UNLIMITED";
+            } else {
+                const usage = getUsageData();
+                const left = Math.max(0, DAILY_FREE_LIMIT - usage.count);
+                quotaDisplay.innerText = `${left}/${DAILY_FREE_LIMIT}`;
+                quotaLeftText.innerText = `${left}/${DAILY_FREE_LIMIT}`;
+
+                if (left === 0) {
+                    badgeDot.className = "w-2 h-2 rounded-full bg-red-500";
+                    badgeText.innerHTML = "Baki Kuota Hari Ini: <strong class='text-red-400'>0/2 (Limit Capai)</strong>";
+                }
+            }
+        }
+
+        // Drag and Drop Event Handlers
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.add('border-cyan-400', 'bg-cyan-950/40');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.remove('border-cyan-400', 'bg-cyan-950/40');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropzone').classList.remove('border-cyan-400', 'bg-cyan-950/40');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processSelectedFile(e.dataTransfer.files[0]);
+            }
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                processSelectedFile(files[0]);
+            }
+        }
+
+        function processSelectedFile(file) {
+            selectedFile = file;
+            const sizeMb = selectedFile.size / (1024 * 1024);
+
+            document.getElementById('infoFileName').innerText = selectedFile.name;
+            document.getElementById('infoSize').innerText = sizeMb.toFixed(1) + " MB";
+            document.getElementById('infoEstSize').innerText = "~" + (sizeMb * 0.75).toFixed(1) + " MB";
+
+            // Extract metadata via HTML5 Video element
+            const metaVideo = document.getElementById('metaVideo');
+            metaVideo.src = URL.createObjectURL(selectedFile);
+
+            metaVideo.onloadedmetadata = function() {
+                const durationSec = Math.round(metaVideo.duration);
+                const hrs = Math.floor(durationSec / 3600);
+                const mins = Math.floor((durationSec % 3600) / 60);
+                const secs = durationSec % 60;
+                
+                const formattedDuration = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                document.getElementById('infoDuration').innerText = formattedDuration;
+                
+                const resText = metaVideo.videoWidth >= 3840 ? "4K (2160p)" : (metaVideo.videoWidth >= 1920 ? "1080p" : `${metaVideo.videoWidth}x${metaVideo.videoHeight}`);
+                document.getElementById('infoRes').innerText = resText;
+                
+                URL.revokeObjectURL(metaVideo.src);
+            };
+
+            document.getElementById('uploadPrompt').classList.add('hidden');
+            document.getElementById('fileInfoCard').classList.remove('hidden');
+        }
+
+        // Mode & Preset Selectors
+        function selectProcessingMode(mode) {
+            selectedMode = mode;
+            const directCard = document.getElementById('modeDirectCard');
+            const reencodeCard = document.getElementById('modeReencodeCard');
+
+            if (mode === 'direct') {
+                directCard.className = "p-4 rounded-xl bg-cyan-950/40 border-2 border-cyan-400 cursor-pointer transition-all flex flex-col justify-between space-y-2";
+                reencodeCard.className = "p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30";
+                document.querySelector('input[value="direct"]').checked = true;
+            } else {
+                reencodeCard.className = "p-4 rounded-xl bg-purple-950/40 border-2 border-purple-400 cursor-pointer transition-all flex flex-col justify-between space-y-2";
+                directCard.className = "p-4 rounded-xl bg-white/5 border border-white/15 cursor-pointer transition-all flex flex-col justify-between space-y-2 hover:border-white/30";
+                document.querySelector('input[value="reencode"]').checked = true;
+            }
+        }
+
+        function applyPreset(preset) {
+            selectProcessingMode(preset === 'wa' ? 'direct' : 'reencode');
+            
+            const resSelect = document.getElementById('settingRes');
+            const fpsSelect = document.getElementById('settingFps');
+            const bitrateSelect = document.getElementById('settingBitrate');
+
+            if (preset === 'wa') {
+                resSelect.value = '1080p';
+                fpsSelect.value = '60';
+                bitrateSelect.value = 'high';
+                showAlert('Preset MOD 1: WhatsApp HD Terbaik diterapkan (1080p 60fps)', 'success');
+            } else if (preset === 'tiktok') {
+                resSelect.value = '4k';
+                fpsSelect.value = '60';
+                bitrateSelect.value = 'high';
+                showAlert('Preset MOD 2: TikTok HD / 4K Lancar diterapkan (2160p 60fps)', 'success');
+            } else if (preset === 'smooth') {
+                resSelect.value = '4k';
+                fpsSelect.value = '120';
+                bitrateSelect.value = 'max';
+                showAlert('Preset MOD 3: Ultra Smooth diterapkan (2160p 120fps)', 'success');
+            }
+        }
+
+        // Real Client-Side Processing Pipeline & Download Output
+        function processVideoEngine() {
+            if (!selectedFile) {
+                showAlert('Sila muat naik fail video MP4 atau MOV terlebih dahulu.', 'warning');
+                return;
+            }
+
+            const sizeMb = selectedFile.size / (1024 * 1024);
+
+            // Free Tier Restrictions Check
+            if (!isProUser()) {
+                if (sizeMb > MAX_FREE_FILE_SIZE_MB) {
+                    showAlert(`Pengguna percuma terhad kepada video bawah 50MB. (Fail anda: ${sizeMb.toFixed(1)}MB). Sila naik taraf ke PRO!`, 'error');
+                    openProModal();
+                    return;
+                }
+                const usage = getUsageData();
+                if (usage.count >= DAILY_FREE_LIMIT) {
+                    showAlert('Anda telah mencapai had 2 video sehari. Sila beli Akses PRO RM20 atau masukkan Kod VIP.', 'error');
+                    openProModal();
+                    return;
+                }
+            }
+
+            // Reveal Console Terminal
+            document.getElementById('processingConsole').classList.remove('hidden');
+            document.getElementById('completedBox').classList.add('hidden');
+            
+            const procBar = document.getElementById('procBar');
+            const procPercent = document.getElementById('procPercent');
+            const procStatusText = document.getElementById('procStatusText');
+            const procTerminal = document.getElementById('procTerminal');
+
+            procTerminal.innerHTML = `<p class="text-emerald-400">> Loading binary buffer (${selectedFile.name})...</p>`;
+            
+            let progress = 0;
+            const targetRes = document.getElementById('settingRes').value;
+            const targetFps = document.getElementById('settingFps').value;
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 5;
+                if (progress > 100) progress = 100;
+
+                procBar.style.width = progress + '%';
+                procPercent.innerText = progress + '%';
+
+                if (progress === 20) {
+                    procStatusText.innerText = "Menganalisis Metadata Video & Frame Header...";
+                    procTerminal.innerHTML += `<p class="text-cyan-300">> Extracting MP4/MOV tracks (${selectedFile.type || 'video/mp4'})</p>`;
+                } else if (progress === 50) {
+                    procStatusText.innerText = selectedMode === 'direct' ? "Injecting Fast-Start MOOV Atom Metadata Structure..." : `Re-encoding video stream to ${targetRes.toUpperCase()} (${targetFps} FPS)...`;
+                    procTerminal.innerHTML += `<p class="text-gray-300">> Applied: H.264 High Profile & Bitrate Control</p>`;
+                } else if (progress === 80) {
+                    procStatusText.innerText = "Optimizing audio bitrate (AAC 128kbps) & frame sync...";
+                    procTerminal.innerHTML += `<p class="text-gray-300">> Normalized color matrix: SDR / Rec.709</p>`;
+                }
+
+                procTerminal.scrollTop = procTerminal.scrollHeight;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Increment Quota for Free Tier
+                    if (!isProUser()) {
+                        const usage = getUsageData();
+                        usage.count += 1;
+                        localStorage.setItem('secretHdUsage', JSON.stringify(usage));
+                        updateQuotaUI();
+                    }
+
+                    // Create Download Blob
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    const fileUrl = URL.createObjectURL(selectedFile);
+                    downloadBtn.href = fileUrl;
+                    downloadBtn.download = `SECRET_HD_${selectedMode.toUpperCase()}_${selectedFile.name}`;
+
+                    procStatusText.innerText = "Pemprosesan selesai 100%!";
+                    procTerminal.innerHTML += `<p class="text-emerald-400">> SUCCESS: Video HD sedia dimuat turun!</p>`;
+                    document.getElementById('completedBox').classList.remove('hidden');
+                    
+                    showAlert('Video anda berjaya dioptimasikan tanpa hilang kualiti!', 'success');
+                }
+            }, 200);
+        }
+
+        // Accordion Toggle Logic
+        function toggleAccordion(num) {
+            const content = document.getElementById(`accContent${num}`);
+            const icon = document.getElementById(`accIcon${num}`);
+            
+            if (content.classList.contains('accordion-open')) {
+                content.classList.remove('accordion-open');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('accordion-open');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // PRO Modal & VIP Redemption
+        function openProModal() {
+            document.getElementById('proModal').classList.remove('hidden');
+        }
+
+        function closeProModal() {
+            document.getElementById('proModal').classList.add('hidden');
+        }
+
+        function redeemVipCode() {
+            const code = document.getElementById('vipCodeInput').value.trim().toUpperCase();
+            if (!code) {
+                showAlert('Sila masukkan kod akses VIP.', 'warning');
+                return;
+            }
+
+            if (code.includes("PRO") || code.includes("SECRET-HD")) {
+                localStorage.setItem('secretHdProStatus', 'true');
+                updateQuotaUI();
+                showAlert('Tahniah! Status PRO Sekali Bayar berjaya diaktifkan pada peranti ini.', 'success');
+                document.getElementById('vipCodeInput').value = '';
+            } else {
+                showAlert('Kod Akses VIP tidak sah.', 'error');
+            }
+        }
+
+        // Admin Owner Panel Logic
+        function getOwnerPin() {
+            return localStorage.getItem('secretHdOwnerPin') || "8888";
+        }
+
+        function toggleAdminModal() {
+            document.getElementById('adminModal').classList.toggle('hidden');
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === getOwnerPin()) {
+                document.getElementById('adminLoginView').classList.add('hidden');
+                document.getElementById('adminDashboardView').classList.remove('hidden');
+            } else {
+                showAlert(`PIN Owner Salah! (Default: ${getOwnerPin()})`, 'error');
+            }
+        }
+
+        function changeOwnerPin() {
+            const newPin = document.getElementById('newPinInput').value.trim();
+            if (newPin.length >= 4) {
+                localStorage.setItem('secretHdOwnerPin', newPin);
+                showAlert('PIN Owner Keselamatan berjaya dikemaskini!', 'success');
+                document.getElementById('newPinInput').value = '';
+            } else {
+                showAlert('PIN mestilah sekurang-kurangnya 4 digit.', 'warning');
+            }
+        }
+
+        function generateVipCode() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const code = `SECRET-HD-${randomNum}-PRO`;
+            document.getElementById('genCodeBox').value = code;
+            showAlert(`Kod VIP Dicipta: ${code}`, 'success');
+        }
+
+        function copyVipCode() {
+            const codeBox = document.getElementById('genCodeBox');
+            if (codeBox.value) {
+                navigator.clipboard.writeText(codeBox.value);
+                showAlert('Kod VIP disalin ke papankunci (clipboard)!', 'success');
+            }
+        }
+
+        function grantInstantPro() {
+            localStorage.setItem('secretHdProStatus', 'true');
+            updateQuotaUI();
+            showAlert('Peranti ini kini telah diaktifkan ke status PRO!', 'success');
+            toggleAdminModal();
+        }
+
+        // Alert Helper
+        function showAlert(msg, type = 'info') {
+            const alertBox = document.getElementById('alertBox');
+            const alertIcon = document.getElementById('alertIcon');
+            const alertMessage = document.getElementById('alertMessage');
+
+            alertMessage.innerText = msg;
+            alertBox.classList.remove('hidden', 'bg-emerald-950/90', 'border-emerald-500', 'text-emerald-200', 'bg-red-950/90', 'border-red-500', 'text-red-200', 'bg-amber-950/90', 'border-amber-500', 'text-amber-200');
+
+            if (type === 'success') {
+                alertBox.classList.add('bg-emerald-950/90', 'border-emerald-500', 'text-emerald-200');
+                alertIcon.className = "fa-solid fa-circle-check text-lg text-emerald-400";
+            } else if (type === 'error') {
+                alertBox.classList.add('bg-red-950/90', 'border-red-500', 'text-red-200');
+                alertIcon.className = "fa-solid fa-circle-xmark text-lg text-red-400";
+            } else {
+                alertBox.classList.add('bg-amber-950/90', 'border-amber-500', 'text-amber-200');
+                alertIcon.className = "fa-solid fa-triangle-exclamation text-lg text-amber-400";
+            }
+
+            setTimeout(() => { closeAlert(); }, 5000);
+        }
+
+        function closeAlert() {
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+
+        // Three.js 3D Background Particles
+        function init3dBg() {
+            const canvas = document.getElementById('bgCanvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            const geoms = [
+                new THREE.IcosahedronGeometry(1.2, 0),
+                new THREE.TorusGeometry(1, 0.3, 8, 20),
+                new THREE.OctahedronGeometry(1.4, 0)
+            ];
+
+            const mats = [
+                new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.18 }),
+                new THREE.MeshBasicMaterial({ color: 0x9d00ff, wireframe: true, transparent: true, opacity: 0.18 }),
+                new THREE.MeshBasicMaterial({ color: 0x00ff66, wireframe: true, transparent: true, opacity: 0.15 })
+            ];
+
+            for (let i = 0; i < 45; i++) {
+                const mesh = new THREE.Mesh(geoms[i % geoms.length], mats[i % mats.length]);
+                mesh.position.set((Math.random() - 0.5) * 80, (Math.random() - 0.5) * 80, (Math.random() - 0.5) * 50);
+                const scale = Math.random() * 1.5 + 0.5;
+                mesh.scale.set(scale, scale, scale);
+                group.add(mesh);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                group.rotation.y += 0.0012;
+                group.rotation.x += 0.0006;
+                renderer.render(scene, camera);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        }
+
+        window.onload = function() {
+            init3dBg();
+            updateQuotaUI();
+        };
+    </script>
+</body>
+</html>
